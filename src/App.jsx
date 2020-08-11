@@ -1,13 +1,17 @@
 import React from "react";
 
+import "./App.css";
+
 import "./components/BMI";
 import BMI from "./components/BMI";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App container">
       <div className="row justify-content-center">
-        <BMI />
+        <div className="col-lg-6 col-lg-offset-3">
+          <BMI />
+        </div>
       </div>
     </div>
   );
