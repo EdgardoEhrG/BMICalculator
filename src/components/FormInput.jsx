@@ -13,7 +13,6 @@ const FormInput = (props) => {
           name={name}
           value={value}
           onChange={onChange}
-          autoComplete={false}
         />
       </div>
     </div>

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import FormInput from "./FormInput";
 
-const BMICalculator = () => {
+const BMICalculator = (props) => {
+  const { getBmiValue } = props;
+
   const [heightUnit, setHeightUnit] = useState("cm");
   const [weightUnit, setWeightUnit] = useState("kg");
   const [unit, settUnit] = useState("Metric");
@@ -12,7 +15,13 @@ const BMICalculator = () => {
     weightCount: "0",
   });
 
-  useEffect(() => {}, [unit]);
+  const { heightCount, weightCount, inchesCount } = count;
+
+  useEffect(() => {
+    metricBMI(heightCount, weightCount);
+    imperialBMI(heightCount, weightCount, inchesCount);
+    // eslint-disable-next-line
+  }, [heightCount, weightCount, inchesCount]);
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
@@ -30,7 +39,34 @@ const BMICalculator = () => {
     }
   };
 
-  const { heightCount, weightCount, inchesCount } = count.data;
+  const metricBMI = (height, weight) => {
+    if (height > 0 && weight > 0) {
+      const heightToMeter = height / 100;
+      const bmi = weight / heightToMeter ** 2;
+      getBmiValue(Math.round(bmi));
+    }
+  };
+
+  const imperialBMI = (height, weight, inches) => {
+    if (height > 0 && weight > 0 && inches > 0) {
+      const heightToInches = height * 12 + parseInt(inches);
+      const bmi = 703 * (weight / (heightToInches * heightToInches));
+      getBmiValue(Math.round(bmi));
+    }
+  };
+
+  const resetData = (e) => {
+    e.preventDefault();
+    getBmiValue(0);
+    settUnit("Metric");
+    setCount({
+      heightCount: "0",
+      inchesCount: "0",
+      weightCount: "0",
+    });
+    setHeightUnit("cm");
+    setWeightUnit("kg");
+  };
 
   return (
     <>
@@ -76,12 +112,16 @@ const BMICalculator = () => {
             onChange={onChangeInput}
           />
         </div>
-        <button className="btn btn-secondary" type="submit">
+        <button className="btn btn-secondary" type="submit" onClick={resetData}>
           Reset
         </button>
       </div>
     </>
   );
+};
+
+BMICalculator.propTypes = {
+  getBmiValue: PropTypes.func.isRequired,
 };
 
 export default BMICalculator;
