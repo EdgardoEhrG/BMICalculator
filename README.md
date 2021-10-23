@@ -1,5 +1,9 @@
 # BMICalculator
 
-> ReactJS
+> React
 
 > CSS
+
+## Useful elements
+
+- [ ] ...
